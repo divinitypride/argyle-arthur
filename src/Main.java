@@ -1,8 +1,9 @@
-package main;
+
  
+import area.Area;
+import area.Area001;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
-import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
@@ -14,9 +15,9 @@ import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
-import com.jme3.post.filters.FogFilter;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import resource.StaticStore;
  
 public class Main extends SimpleApplication
   implements ActionListener {
@@ -26,8 +27,7 @@ public class Main extends SimpleApplication
     private RigidBodyControl landscape;
     private CharacterControl player;
     private Vector3f walkDirection = new Vector3f();
-    private boolean left = false, right = false, up = false, down = false;
- 
+    private Area001 area = new Area001();
   
     public static void main(String[] args) {
         Main app = new Main();
@@ -36,38 +36,29 @@ public class Main extends SimpleApplication
  
     public void simpleInitApp() {
         // Set up Physics
+        area.initArea();
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         bulletAppState.getPhysicsSpace().enableDebug(assetManager);
  
-        viewPort.setBackgroundColor(new ColorRGBA(0.7f, 0.8f, 1f, 1f));
+        viewPort.setBackgroundColor(area.getBackgroundColor());
     
         FilterPostProcessor filter = new FilterPostProcessor(assetManager);
-        FogFilter fog = new FogFilter();
-        fog.setFogColor(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
-        fog.setFogDistance(512);
-        fog.setFogDensity(1.5f);
-        filter.addFilter(fog);
+        filter.addFilter(area.getFog());
         viewPort.addProcessor(filter);
     
-        flyCam.setMoveSpeed(100);
+        flyCam.setMoveSpeed(area.getPlayer().getSpeed());
         setUpKeys();
         setUpLight();
  
-        sceneModel = assetManager.loadModel("Scenes/map_005.j3o");
-        sceneModel.setLocalScale(8f);
+        sceneModel = assetManager.loadModel(area.getSceneModelPath());
+        sceneModel.setLocalScale(area.getSceneModelScale());
  
         CollisionShape sceneShape = CollisionShapeFactory.createMeshShape((Node) sceneModel);
         landscape = new RigidBodyControl(sceneShape, 0);
         sceneModel.addControl(landscape);
  
-        CapsuleCollisionShape capsuleShape = new CapsuleCollisionShape(1.5f, 6f, 1);
-        player = new CharacterControl(capsuleShape, 1.0f);
-        player.setJumpSpeed(10f);
-        player.setFallSpeed(20f);
-        player.setGravity(20f);
-        player.setMaxSlope(0.8f);
-        player.setPhysicsLocation(new Vector3f(0, 128, 0));
+        player = area.getPlayer().getCharacterControl();
 
         rootNode.attachChild(sceneModel);
         bulletAppState.getPhysicsSpace().add(landscape);
@@ -77,7 +68,7 @@ public class Main extends SimpleApplication
     private void setUpLight() {
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.White.mult(1.7f));
-        rootNode.addLight(al);
+        rootNode.attachChild(area.initLight());
     }
  
     private void setUpKeys() {
@@ -94,17 +85,7 @@ public class Main extends SimpleApplication
     }
  
     public void onAction(String binding, boolean value, float tpf) {
-        if (binding.equals("Left")) {
-            left = value;
-        } else if (binding.equals("Right")) {
-            right = value;
-        } else if (binding.equals("Up")) {
-            up = value;
-        } else if (binding.equals("Down")) {
-            down = value;
-        } else if (binding.equals("Jump")) {
-            player.jump();
-        }
+        StaticStore.get().setKeyState(binding, value);
     }
  
     @Override
@@ -112,11 +93,12 @@ public class Main extends SimpleApplication
         Vector3f camDir = cam.getDirection().clone().multLocal(0.2f);
         Vector3f camLeft = cam.getLeft().clone().multLocal(0.2f);
         walkDirection.set(0, 0, 0);
-        if (left)  { walkDirection.addLocal(camLeft); }
-        if (right) { walkDirection.addLocal(camLeft.negate()); }
-        if (up)    { walkDirection.addLocal(camDir); }
-        if (down)  { walkDirection.addLocal(camDir.negate()); }
+        if (StaticStore.get().getKeyState("Left"))  { walkDirection.addLocal(camLeft); }
+        if (StaticStore.get().getKeyState("Right")) { walkDirection.addLocal(camLeft.negate()); }
+        if (StaticStore.get().getKeyState("Up"))    { walkDirection.addLocal(camDir); }
+        if (StaticStore.get().getKeyState("Down"))  { walkDirection.addLocal(camDir.negate()); }
         player.setWalkDirection(walkDirection);
         cam.setLocation(player.getPhysicsLocation());
+        System.out.println(cam.getLocation().y);
     }
 }
