@@ -2,20 +2,23 @@ package area;
 
 import com.jme3.math.ColorRGBA;
 import com.jme3.post.filters.FogFilter;
-import com.jme3.scene.Node;
 import main.Player;
 
 /**
  *
  * @author Jarrod
  */
-public abstract class Area {
+public class Area {
     
     private String sceneModelPath;
     private float sceneModelScale;
     private ColorRGBA backgroundColor;
     private FogFilter fog;
     private Player player;
+    
+    public Area() {
+
+    }
     
     /**
      * @return the sceneModelLocation
@@ -96,14 +99,6 @@ public abstract class Area {
     }
     
     public void initArea() {
-
-    }
-    
-    public Node initLight() {
-        return null;
-    }
-    
-    public void initKeys() {
 
     }
 

@@ -15,19 +15,19 @@ import com.jme3.light.AmbientLight;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.Spatial;
 import resource.StaticStore;
  
 public class Main extends SimpleApplication
   implements ActionListener {
  
-    private Spatial sceneModel;
+    private Geometry sceneModel;
     private BulletAppState bulletAppState;
     private RigidBodyControl landscape;
     private CharacterControl player;
     private Vector3f walkDirection = new Vector3f();
-    private Area001 area = new Area001();
+    private Area area = new Area001();
   
     public static void main(String[] args) {
         Main app = new Main();
@@ -51,24 +51,24 @@ public class Main extends SimpleApplication
         setUpKeys();
         setUpLight();
  
-        sceneModel = assetManager.loadModel(area.getSceneModelPath());
+        sceneModel = (Geometry) assetManager.loadModel(area.getSceneModelPath());
+        System.out.println(area.getSceneModelPath());
         sceneModel.setLocalScale(area.getSceneModelScale());
  
-        CollisionShape sceneShape = CollisionShapeFactory.createMeshShape((Node) sceneModel);
-        landscape = new RigidBodyControl(sceneShape, 0);
-        sceneModel.addControl(landscape);
+        RigidBodyControl sceneShape = new RigidBodyControl(CollisionShapeFactory.createMeshShape(sceneModel), 0);
+        sceneModel.addControl(sceneShape);
  
         player = area.getPlayer().getCharacterControl();
 
         rootNode.attachChild(sceneModel);
-        bulletAppState.getPhysicsSpace().add(landscape);
+        bulletAppState.getPhysicsSpace().add(sceneModel);
         bulletAppState.getPhysicsSpace().add(player);
     }
  
     private void setUpLight() {
         AmbientLight al = new AmbientLight();
         al.setColor(ColorRGBA.White.mult(1.7f));
-        rootNode.attachChild(area.initLight());
+        rootNode.addLight(al);
     }
  
     private void setUpKeys() {
@@ -76,12 +76,12 @@ public class Main extends SimpleApplication
         inputManager.addMapping("Right", new KeyTrigger(KeyInput.KEY_D));
         inputManager.addMapping("Up", new KeyTrigger(KeyInput.KEY_W));
         inputManager.addMapping("Down", new KeyTrigger(KeyInput.KEY_S));
-        inputManager.addMapping("Jump", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("Space", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addListener(this, "Left");
         inputManager.addListener(this, "Right");
         inputManager.addListener(this, "Up");
         inputManager.addListener(this, "Down");
-        inputManager.addListener(this, "Jump");
+        inputManager.addListener(this, "Space");
     }
  
     public void onAction(String binding, boolean value, float tpf) {
@@ -97,8 +97,8 @@ public class Main extends SimpleApplication
         if (StaticStore.get().getKeyState("Right")) { walkDirection.addLocal(camLeft.negate()); }
         if (StaticStore.get().getKeyState("Up"))    { walkDirection.addLocal(camDir); }
         if (StaticStore.get().getKeyState("Down"))  { walkDirection.addLocal(camDir.negate()); }
+        if (StaticStore.get().getKeyState("Space")) { player.jump();}
         player.setWalkDirection(walkDirection);
         cam.setLocation(player.getPhysicsLocation());
-        System.out.println(cam.getLocation().y);
     }
 }
