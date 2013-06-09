@@ -1,5 +1,6 @@
 package area;
 
+import com.jme3.audio.AudioNode;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
 import com.jme3.post.filters.FogFilter;
