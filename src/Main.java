@@ -1,15 +1,18 @@
 
-import main.Application;
-import resource.StaticStore;
+import com.jme3.system.AppSettings;
+import main.TestMap;
 
 
 
  public class Main {
     
     public static void main(String[] args) {
-        StaticStore staticStore = new StaticStore();
-        staticStore.setAudio("Audio/frost.wav", null);
-        Application app = new Application(staticStore);
+        TestMap app = new TestMap();
+        app.setShowSettings((false));
+        AppSettings settings = new AppSettings(true);
+        settings.setResolution(800, 600);
+        settings.setBitsPerPixel(32);
+        app.setSettings(settings);
         app.start();
     }
  }
