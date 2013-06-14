@@ -19,11 +19,11 @@ public class Player {
     private float gravity;
     private float maxSlope;
     private Vector3f location;
-    
+
     public Player(float radius, float height, int axis, float speed,
       float stepHeight, float jumpSpeed, float fallSpeed, float gravity,
         float maxSlope, Vector3f location) {
-        
+
         this.capsuleShape = new CapsuleCollisionShape(radius, height, axis);
         this.speed = speed;
         this.stepHeight = stepHeight;
@@ -38,7 +38,7 @@ public class Player {
         characterControl.setGravity(gravity);
         characterControl.setMaxSlope(maxSlope);
         characterControl.setPhysicsLocation(location);
-        
+
     }
 
     /**
@@ -102,6 +102,14 @@ public class Player {
      */
     public CharacterControl getCharacterControl() {
         return characterControl;
+    }
+
+    public void jump() {
+        characterControl.jump();
+    }
+
+    public void setWalkDirection(Vector3f walkDirection) {
+        characterControl.setWalkDirection(walkDirection);
     }
 
 }
