@@ -18,6 +18,7 @@ public class Player {
     private float fallSpeed;
     private float gravity;
     private float maxSlope;
+    private boolean isJumping;
     private Vector3f location;
 
     public Player(float radius, float height, int axis, float speed,
@@ -106,6 +107,7 @@ public class Player {
 
     public void jump() {
         characterControl.jump();
+        isJumping = true;
     }
 
     public void setWalkDirection(Vector3f walkDirection) {
