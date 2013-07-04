@@ -16,9 +16,9 @@ public class StaticStore {
 
     }
 
-    public void decache(String imgPath) throws IOException {
-        if (images.get(imgPath) != null) {
-            images.remove(getSprite(imgPath));
+    public void decache(String binding) throws IOException {
+        if (images.get(binding) != null) {
+            images.remove(getSprite(binding));
         }
     }
 

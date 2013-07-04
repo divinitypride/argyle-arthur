@@ -12,7 +12,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import static java.lang.Math.*;
 import java.util.Iterator;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
@@ -20,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import main.TriggerEvent;
 import main.World;
+import tile.Tile;
 
 public class GWindow extends JFrame {
 
@@ -66,14 +66,21 @@ public class GWindow extends JFrame {
         public void paint(Graphics g) {
             Graphics2D g2d = (Graphics2D) g;
             super.paintComponent(g2d);
-            for(Iterator<Entity> ir = world.getEntities().iterator(); ir.hasNext();) {
-                Entity entity = ir.next();
-                if (entity.getX() >= world.getFocusX()
-                  || entity.getX() <= world.getFocusX() + world.getFocusWidth()
-                  || entity.getY() >= world.getFocusY()
-                  || entity.getY() <= world.getFocusY() + world.getFocusHeight()) {
-                    g2d.drawImage(entity.getImage(), round(entity.getX() - entity.getOriginX()),
-                      round(entity.getY() - entity.getOriginY()), this);
+            for(Iterator<IDrawable> ir = world.getDrawables().iterator(); ir.hasNext();) {
+                IDrawable object = ir.next();
+                if (object.getX() >= world.getFocusX()
+                  || object.getX() <= world.getFocusX() + world.getFocusWidth()
+                  || object.getY() >= world.getFocusY()
+                  || object.getY() <= world.getFocusY() + world.getFocusHeight()) {
+                    if (object instanceof Entity) {
+                        Entity entity = (Entity) object;
+                        g2d.drawImage(entity.getImage(), object.getX() - entity.getOriginX(),
+                      entity.getY() - entity.getOriginY(), this);
+                    } else if (object instanceof Tile) {
+                        Tile tile = (Tile) object;
+                        g2d.drawImage(tile.getImage(), tile.getX(), tile.getY(), this);
+                    }
+
                 }
             }
             Toolkit.getDefaultToolkit().sync();

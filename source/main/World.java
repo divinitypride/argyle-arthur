@@ -1,22 +1,26 @@
 package main;
 
 import entity.Entity;
+import graphics.IDrawable;
 import graphics.StaticStore;
 import java.util.HashSet;
 import java.util.Iterator;
 import main.TriggerEvent.Trigger;
-import type.TypeDimension;
+import math.TypeDimension;
+import tile.Tile;
 
 public class World {
 
 	//fields
         private StaticStore staticStore;
         private String name;
+        private HashSet<IDrawable> drawables = new HashSet<>();
         private HashSet<Entity> entities = new HashSet<>();
+        private HashSet<Tile> tiles = new HashSet<>();
         private HashSet<TriggerEvent> triggers = new HashSet<>();
+        private HashSet<Entity> selectedEntities = new HashSet<>();
         private TypeDimension focus = new TypeDimension();
         private TypeDimension dimensions = new TypeDimension();
-        private HashSet<Entity> selectedEntities = new HashSet<>();
 
 	//constructors
         public World(String name, int worldWidth, int worldHeight, int fx, int fy, int fw, int fh) {
@@ -43,6 +47,10 @@ public class World {
 	}
 
 	//methods
+        public synchronized HashSet<IDrawable> getDrawables() {
+            return (HashSet<IDrawable>) drawables.clone();
+        }
+
         public synchronized HashSet<Entity> getEntities() {
             return (HashSet<Entity>) entities.clone();
         }
@@ -101,18 +109,24 @@ public class World {
 
         public synchronized void addEntity(Entity entity) {
             entities.add(entity);
+            drawables.add(entity);
         }
 
         public synchronized void removeEntity(Entity entity) {
             entities.remove(entity);
+            drawables.remove(entity);
         }
 
         public synchronized void selectEntity(Entity entity) {
             selectedEntities.add(entity);
+            entities.add(entity);
+            drawables.add(entity);
         }
 
         public synchronized void deselectEntity(Entity entity) {
             selectedEntities.remove(entity);
+            entities.remove(entity);
+            drawables.remove(entity);
         }
 
         public synchronized void addTriggerToStack(TriggerEvent t) {
@@ -122,6 +136,7 @@ public class World {
         }
 
         public synchronized void update() {
+            triggers.add(new TriggerEvent(this, Trigger.UPDATE));
             for (Iterator<Entity> it = entities.iterator(); it.hasNext();) {
                 Entity entity = it.next();
                 if (!triggers.isEmpty()) {
