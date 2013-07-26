@@ -1,17 +1,19 @@
 package main;
 
 
-import entity.objects.Craft;
 import graphics.GWindow;
+import graphics.StaticStore;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import map.MapTest01;
 
 public class Main {
 
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
-    private static World world;
+    public static World WORLD = new World();
     private static GWindow gWindow;
+    public static StaticStore STORE = new StaticStore();
 
     public static void main(String[] args) throws IOException {
         initWorld();
@@ -20,12 +22,11 @@ public class Main {
     }
 
     private static void initWorld() throws IOException {
-        world = new World("Test");
-        world.addEntity(new Craft(world, 16, 16));
+        WORLD.setMap(new MapTest01());
     }
 
     private static void initGraphics() {
-        gWindow = new GWindow(world);
+        gWindow = new GWindow();
         gWindow.setVisible(true);
     }
 

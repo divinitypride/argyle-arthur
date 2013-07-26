@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import javax.imageio.ImageIO;
+import unit.Unit;
 
 public class StaticStore {
 
@@ -24,14 +25,18 @@ public class StaticStore {
 
     public BufferedImage getSprite(String binding) throws IOException {
         if (images.get(binding) != null) {
-            System.out.println("Retrieved:" + binding);
             return (BufferedImage) images.get(binding);
         } else {
-            System.out.println("Loaded:" + binding);
             BufferedImage img = ImageIO.read(new File("images\\" + binding + ".png"));
             images.put(binding, img);
             return img;
         }
+    }
+
+    public BufferedImage getSprite(Unit unit, int part) throws IOException {
+        String binding = unit.getBinding() + "\\" + unit.getParts()[part].getBinding();
+        System.out.println(binding);
+        return getSprite(binding);
     }
 
 }
