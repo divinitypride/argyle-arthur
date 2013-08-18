@@ -1,12 +1,11 @@
 package math;
 
- // @author Jarrod
-
-public class Point2<T> {
+// @author Jarrod
+public final class Point2<T> {
 
     //fields
-    private T x;
-    private T y;
+    private final T x;
+    private final T y;
 
     //constructors
     public Point2(T x, T y) {
@@ -32,17 +31,16 @@ public class Point2<T> {
         return y;
     }
 
-    public void set(Point2<T> t1) {
-        this.x = t1.getX();
-        this.y = t1.getY();
+    public Point2<T> setX(T x) {
+        return new Point2<>(x, getY());
     }
 
-    public void setX(T x) {
-        this.x = x;
+    public Point2<T> setY(T y) {
+        return new Point2<>(getX(), y);
     }
 
-    public void setY(T y) {
-        this.y = y;
+    @Override
+    public String toString() {
+        return x.toString() + " " + y.toString();
     }
-
 }

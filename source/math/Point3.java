@@ -1,13 +1,12 @@
 package math;
 
- // @author Jarrod
-
-public class Point3<T> {
+// @author Jarrod
+public final class Point3<T> {
 
     //fields
-    private T x;
-    private T y;
-    private T z;
+    private final T x;
+    private final T y;
+    private final T z;
 
     //constructors
     public Point3(T x, T y, T z) {
@@ -39,22 +38,24 @@ public class Point3<T> {
         return z;
     }
 
-    public void set(Point3<T> t1) {
-        this.x = t1.getX();
-        this.y = t1.getY();
-        this.z = t1.getZ();
+    public Point3<T> setX(T x) {
+        return new Point3<>(x, getY(), getZ());
     }
 
-    public void setX(T x) {
-        this.x = x;
+    public Point3<T> setY(T y) {
+        return new Point3<>(getX(), y, getZ());
     }
 
-    public void setY(T y) {
-        this.y = y;
+    public Point3<T> setZ(T z) {
+        return new Point3<>(getX(), getY(), z);
     }
 
-    public void setZ(T z) {
-        this.z = z;
+    public Point2<T> convertPoint2() {
+        return new Point2<>(x, y);
     }
 
+    @Override
+    public String toString() {
+        return x.toString() + " " + y.toString() + " " + z.toString();
+    }
 }

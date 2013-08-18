@@ -1,7 +1,6 @@
 package math;
 
- // @author Jarrod
-
+// @author Jarrod
 public class PointPair<T> {
 
     //fields
@@ -22,5 +21,4 @@ public class PointPair<T> {
     public T getPointTwo() {
         return point2;
     }
-
 }

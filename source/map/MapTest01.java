@@ -1,28 +1,30 @@
 package map;
 
- // @author Jarrod
-import tile.Tile;
-import unit.Unit;
-import unit.UnitVillagerDebug;
+// @author Jarrod
+import map.generator.GeneratorRiver;
+import map.generator.GeneratorTileBase;
+import map.tile.TilePlain;
+import math.Point3;
+import unit.Entity;
+import unit.EntityVillager;
 
-
-
-public class MapTest01 extends Map {
+public class MapTest01 extends MapCharacter {
 
     //fields
-    private static Tile[][][] tileMap = {{{Map.TILE_FLAT_MEADOW, Map.TILE_FLAT_MEADOW, Map.TILE_FLAT_GRASSLAND}},
-        {{ Map.TILE_FLAT_PLAIN, Map.TILE_FLAT_GRASSLAND, Map.TILE_FLAT_PLAIN}},
-        {{ Map.TILE_FLAT_GRASSLAND, Map.TILE_FLAT_MEADOW, Map.TILE_FLAT_PLAIN}}};
-
-    private static Unit[][][] unitMap = {{{Map.UNIT_NULL, Map.UNIT_NULL, Map.UNIT_NULL}},
-        {{ Map.UNIT_NULL, new UnitVillagerDebug(), Map.UNIT_NULL}},
-        {{ Map.UNIT_NULL, Map.UNIT_NULL, Map.UNIT_NULL}}};
-
     //constructors
-    public MapTest01() {
-        super(tileMap, unitMap);
+    private MapTest01(Entity character) {
+        super(25, 25, 1, character);
     }
 
     //methods
-
+    public static MapTest01 newInstance() {
+        Entity character = new EntityVillager(new Point3(32, 32, 1));
+        MapTest01 map = new MapTest01(character);
+        GeneratorTileBase gTileBase = GeneratorTileBase.getInstance();
+        GeneratorRiver gRiver = GeneratorRiver.getInstance();
+        gTileBase.generate(map, new TilePlain());
+        gRiver.generate(map);
+        map.addEntity(character);
+        return map;
+    }
 }
