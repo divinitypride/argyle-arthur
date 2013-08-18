@@ -31,11 +31,11 @@ public class StaticStore {
 
     public void decache(String binding) throws IOException {
         if (images.get(binding) != null) {
-            images.remove(getSprite(binding));
+            images.remove(getImage(binding));
         }
     }
 
-    public BufferedImage getSprite(String binding) throws IOException {
+    public BufferedImage getImage(String binding) throws IOException {
         if (images.get(binding) != null) {
             return images.get(binding);
         } else {

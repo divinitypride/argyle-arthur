@@ -18,7 +18,7 @@ public class World {
     }
 
     public World() {
-        this(640, 480);
+        this(640, 512);
     }
 
     //methods

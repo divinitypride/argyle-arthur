@@ -33,7 +33,7 @@ public abstract class Tile {
     }
 
     public BufferedImage getImage() throws IOException {
-        return Main.STORE.getSprite(imageBinding);
+        return Main.STORE.getImage(imageBinding);
     }
 
     public void setImageBinding(String imageBinding) {

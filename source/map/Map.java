@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import map.tile.Tile;
 import math.Point3;
-import unit.Entity;
+import entity.Entity;
 import static math.nMath.*;
 
 public abstract class Map {

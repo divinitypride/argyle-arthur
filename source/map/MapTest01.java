@@ -7,8 +7,8 @@ import map.generator.Generator;
 import map.generator.GeneratorTileBase;
 import map.tile.TilePlain;
 import math.Point3;
-import unit.Entity;
-import unit.EntityVillager;
+import entity.Entity;
+import entity.EntityVillager;
 
 public class MapTest01 extends MapCharacter {
 

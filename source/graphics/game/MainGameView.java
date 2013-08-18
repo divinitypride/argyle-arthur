@@ -17,7 +17,7 @@ import main.TriggerEvent;
 import map.Map;
 import map.MapCharacter;
 import map.tile.Tile;
-import unit.Entity;
+import entity.Entity;
 
 public class MainGameView implements IView {
 
@@ -30,7 +30,7 @@ public class MainGameView implements IView {
             MapCharacter map = (MapCharacter) Main.WORLD.getMap();
             Entity character = map.getCharacter();
             if (Main.STORE.getKey(KeyEvent.VK_LEFT)) {
-                character.setLocation(character.getLocation().setX(character.getLocation().getX() - character.getSpeed()));
+                character.setLocation(character.getLocation().setX((character.getLocation().getX() - character.getSpeed())));
             }
 
             if (Main.STORE.getKey(KeyEvent.VK_RIGHT)) {
@@ -69,8 +69,8 @@ public class MainGameView implements IView {
         for (; it.hasNext();) {
             Entity entity = it.next();
             try {
-                g2d.drawImage(entity.getImage(), entity.getLocation().getX() - entity.getImageOrigin().getX() - map.getFocus().getX(),
-                        entity.getLocation().getY() - entity.getImageOrigin().getY() - map.getFocus().getY(), null);
+                g2d.drawImage(entity.getImage(), (int) (entity.getLocation().getX() - entity.getImageOrigin().getX() - map.getFocus().getX()),
+                        (int) (entity.getLocation().getY() - entity.getImageOrigin().getY() - map.getFocus().getY()), null);
             } catch (IOException ex) {
                 Logger.getLogger(MainGameView.class.getName()).log(Level.SEVERE, null, ex);
             }

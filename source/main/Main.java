@@ -2,7 +2,7 @@ package main;
 
 import graphics.GWindow;
 import graphics.StaticStore;
-import graphics.game.MainGameView;
+import graphics.title.TitleView;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,7 +15,7 @@ public class Main {
     public static World WORLD = new World();
     private static GWindow gWindow;
     public static StaticStore STORE = new StaticStore();
-    private static IView view = new MainGameView();
+    private static IView view = new TitleView();
 
     public static void main(String[] args) throws IOException {
         initWorld();
