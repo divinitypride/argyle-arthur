@@ -14,12 +14,16 @@ import map.tile.Tile;
 public class GeneratorTileBase extends Generator {
 
     //fields
+    private Tile tile;
+
     //constructor
-    private GeneratorTileBase() {
+    public GeneratorTileBase(Tile tile) {
+        this.tile = tile;
     }
 
     //methods
-    public void generate(Map map, Tile tile) {
+    @Override
+    public void generate(Map map) {
         Tile[][] tileMap = new Tile[map.getTileMap().length][map.getTileMap()[0].length];
         for (int j = 0; j < tileMap.length; j += 1) {
             for (int k = 0; k < tileMap[0].length; k += 1) {
@@ -27,14 +31,5 @@ public class GeneratorTileBase extends Generator {
             }
         }
         map.setTileMap(tileMap);
-    }
-
-    public static GeneratorTileBase getInstance() {
-        return GeneratorTileBaseHolder.INSTANCE;
-    }
-
-    private static class GeneratorTileBaseHolder {
-
-        private static final GeneratorTileBase INSTANCE = new GeneratorTileBase();
     }
 }
